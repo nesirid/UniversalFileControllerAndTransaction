@@ -27,7 +27,6 @@ namespace App.Controllers
             _fileParsers = fileParsers;
         }
 
-
         [HttpGet]
         public async Task<IActionResult> GetTransactions([FromQuery] int pageNumber = 1,
                                                          [FromQuery] int pageSize = 10)
@@ -40,8 +39,17 @@ namespace App.Controllers
         public async Task<IActionResult> DeleteFile(int Id)
         {
             var result = await _transactionService.DeleteTransactionAsync(Id);
-            if (!result) return NotFound(new { Message = "Fayl tapilmadi" });
-            return Ok(new { Message = "Fayl ugurla silindi" });
+            if (!result) return NotFound(new { Message = "Tranzaksiya tapilmadi" });
+            return Ok(new { Message = "Transaksiya ugurla silindi" });
+        }
+
+        [HttpDelete("delete-all")]
+        public async Task<IActionResult> DeleteAllTransactions()
+        {
+            var result = await _transactionService.DeleteAllTransactionsAsync();
+            if (!result) return StatusCode(500, "Xeta bas verdi");
+
+            return Ok(new { Message = "Butun tranzaksiyalar silindi" });
         }
     }
 }

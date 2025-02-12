@@ -12,8 +12,8 @@ using Repository.Data;
 namespace Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250208201519_CreateTransactionsTableInDb")]
-    partial class CreateTransactionsTableInDb
+    [Migration("20250212073317_AddCorrectionDbConnection")]
+    partial class AddCorrectionDbConnection
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,6 +67,8 @@ namespace Repository.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Date");
 
                     b.ToTable("Transactions");
                 });

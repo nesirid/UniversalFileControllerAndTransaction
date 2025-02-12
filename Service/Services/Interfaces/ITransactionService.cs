@@ -13,5 +13,7 @@ namespace Service.Services.Interfaces
         Task ProcessFileAsync(string fileContent, string fileType);
         Task<List<TransactionDto>> GetTransactionDtosAsync(int pageNumber, int pageSize);
         Task<bool> DeleteTransactionAsync(int Id);
+        Task<bool> DeleteAllTransactionsAsync();
+
     }
 }

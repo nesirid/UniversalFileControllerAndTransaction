@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateTransactionsTableInDb : Migration
+    public partial class AddCorrectionDbConnection : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,6 +32,11 @@ namespace Repository.Migrations
                 {
                     table.PrimaryKey("PK_Transactions", x => x.Id);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transactions_Date",
+                table: "Transactions",
+                column: "Date");
         }
 
         /// <inheritdoc />

@@ -70,6 +70,24 @@ namespace Service.Services
 
             return Task.FromResult(files);
         }
+
+        public async Task<bool> DeleteAllFilesAsync()
+        {
+            try
+            {
+                var files = Directory.GetFiles(_uploadsPath);
+                foreach (var file in files)
+                {
+                    File.Delete(file);
+                }
+                return await Task.FromResult(true);
+            }
+            catch
+            {
+                return await Task.FromResult(false);
+            }
+        }
+
     }
 }
 

@@ -13,6 +13,12 @@ namespace Repository.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Transaction>()
+                .Property(t => t.Amount)
+                .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<Transaction>()
+                .HasIndex(t => t.Date);
         }
     }
 }

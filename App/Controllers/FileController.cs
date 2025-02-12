@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Repository.Data;
 using Service.Services;
+using Service.Parsers;
 using Service.Services.Interfaces;
 using System.Text;
 
@@ -117,6 +118,16 @@ namespace App.Controllers
             if (!result)
             return NotFound(new { Message = "Fayl tapilmadi" });
             return Ok(new { Message = "Fayl ugurla silindi" });
+        }
+
+        [HttpDelete("delete-all")]
+        public async Task<IActionResult> DeleteAllFiles()
+        {
+            var result = await _fileService.DeleteAllFilesAsync();
+            if (result)
+                return Ok(new { Message = "Bütün fayllar uğurla silindi" });
+
+            return StatusCode(500, new { Message = "Faylları silmək mümkün olmadı" });
         }
     }
 }

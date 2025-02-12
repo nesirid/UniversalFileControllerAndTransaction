@@ -65,6 +65,8 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Date");
+
                     b.ToTable("Transactions");
                 });
 #pragma warning restore 612, 618

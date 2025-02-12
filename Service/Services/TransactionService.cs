@@ -45,25 +45,25 @@ namespace Service.Services
 
         public async Task<List<TransactionDto>> GetTransactionDtosAsync(int pageNumber, int pageSize)
         {
-            if (pageNumber <= 0) pageNumber = 1;
-            if (pageSize <= 0) pageSize = 10;
-            if (pageSize > 100) pageSize = 100;
+            pageNumber = Math.Max(pageNumber, 1);
+            pageSize = Math.Clamp(pageSize, 1, 100);
 
-            var transactions = await _dbContext.Transactions
+            return await _dbContext.Transactions
+                .AsNoTracking()
+                .OrderBy(t => t.Id)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
-                .ToListAsync();
-
-            return transactions.Select(t => new TransactionDto
-            {
-                Id = t.Id,
-                TransactionID = t.TransactionID,
-                AccountNumber = t.AccountNumber,
-                Amount = t.Amount,
-                Currency = t.Currency,
-                TransactionType = t.TransactionType,
-                Date = t.Date
-            }).ToList();
+                .Select(t => new TransactionDto
+                {
+                    Id = t.Id,
+                    TransactionID = t.TransactionID,
+                    AccountNumber = t.AccountNumber,
+                    Amount = t.Amount,
+                    Currency = t.Currency,
+                    TransactionType = t.TransactionType,
+                    Date = t.Date
+                })
+                .ToListAsync(); 
         }
 
         public async Task<bool> DeleteTransactionAsync(int Id)
@@ -75,6 +75,18 @@ namespace Service.Services
             await _dbContext.SaveChangesAsync();
             return true;
         }
-
+        public async Task<bool> DeleteAllTransactionsAsync()
+        {
+            try
+            {
+                await _dbContext.Database.ExecuteSqlRawAsync("DELETE FROM Transactions");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] DeleteAllTransactionsAsync failed: {ex.Message}");
+                return false;
+            }
+        }
     }
 }
