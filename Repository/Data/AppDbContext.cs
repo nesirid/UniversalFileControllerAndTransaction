@@ -13,8 +13,6 @@ namespace Repository.Data
         {
             base.OnModelCreating(modelBuilder);
 
-
-
             modelBuilder.Entity<Transaction>()
                 .Property(t => t.Id)
                 .ValueGeneratedOnAdd();

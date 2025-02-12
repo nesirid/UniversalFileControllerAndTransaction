@@ -64,6 +64,8 @@ namespace Service.Services
                     TransactionType = t.TransactionType,
                     Date = t.Date
                 })
+                .AsSplitQuery() 
+                .AsNoTrackingWithIdentityResolution()
                 .ToListAsync();
         }
 
@@ -72,7 +74,7 @@ namespace Service.Services
             var transaction = await _dbContext.Transactions
                 .FirstOrDefaultAsync(t => t.Id == id && !t.IsDeleted);
 
-            if (transaction == null) return false; 
+            if (transaction == null) return false;
 
             transaction.IsDeleted = true;
             transaction.DeletedDate = DateTime.UtcNow;
@@ -110,8 +112,17 @@ namespace Service.Services
 
         public async Task<bool> DeleteAllTransactionsAsync()
         {
-            await _dbContext.Database.ExecuteSqlRawAsync("DELETE FROM Transactions");
-            return true;
+            try
+            {
+                int affectedRows = await _dbContext.Transactions.ExecuteDeleteAsync();
+                _dbContext.ChangeTracker.Clear();
+                return affectedRows > 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] Failed to delete transactions: {ex.Message}");
+                return false;
+            }
         }
     }
 }
