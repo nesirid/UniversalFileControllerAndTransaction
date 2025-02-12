@@ -50,6 +50,7 @@ namespace Service.Services
 
             return await _dbContext.Transactions
                 .AsNoTracking()
+                .Where(t => !t.IsDeleted)
                 .OrderBy(t => t.Id)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
@@ -63,30 +64,27 @@ namespace Service.Services
                     TransactionType = t.TransactionType,
                     Date = t.Date
                 })
-                .ToListAsync(); 
+                .ToListAsync();
         }
 
-        public async Task<bool> DeleteTransactionAsync(int Id)
+        public async Task<bool> DeleteTransactionAsync(int id)
         {
-            var transaction = await _dbContext.Transactions.FindAsync(Id);
-            if (transaction == null) return false;
+            var transaction = await _dbContext.Transactions
+                .FirstOrDefaultAsync(t => t.Id == id && !t.IsDeleted);
 
-            _dbContext.Transactions.Remove(transaction);
+            if (transaction == null) return false; 
+
+            transaction.IsDeleted = true;
+            transaction.DeletedDate = DateTime.UtcNow;
+
             await _dbContext.SaveChangesAsync();
             return true;
         }
+
         public async Task<bool> DeleteAllTransactionsAsync()
         {
-            try
-            {
-                await _dbContext.Database.ExecuteSqlRawAsync("DELETE FROM Transactions");
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"[ERROR] DeleteAllTransactionsAsync failed: {ex.Message}");
-                return false;
-            }
+            await _dbContext.Database.ExecuteSqlRawAsync("DELETE FROM Transactions");
+            return true;
         }
     }
 }

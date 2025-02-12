@@ -13,6 +13,11 @@ namespace Repository.Data
         {
             base.OnModelCreating(modelBuilder);
 
+
+
+            modelBuilder.Entity<Transaction>()
+                .Property(t => t.Id)
+                .ValueGeneratedOnAdd();
             modelBuilder.Entity<Transaction>()
                 .Property(t => t.Amount)
                 .HasColumnType("decimal(18,2)");
