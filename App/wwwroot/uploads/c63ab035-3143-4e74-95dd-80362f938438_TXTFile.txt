@@ -1,0 +1,4 @@
+TransactionID | AccountNumber | Amount | Currency | TransactionType | Date
+1001 | TR1234567890 | 250.75 | USD | Deposit | 2024-02-01
+1002 | TR0987654321 | 500.00 | EUR | Withdrawal | 2024-02-02
+1003 | TR1122334455 | 1200.50 | TRY | Transfer | 2024-02-03

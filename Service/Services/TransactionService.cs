@@ -67,7 +67,7 @@ namespace Service.Services
                 .ToListAsync();
         }
 
-        public async Task<bool> DeleteTransactionAsync(int id)
+        public async Task<bool> SoftDeleteTransactionAsync(int id)
         {
             var transaction = await _dbContext.Transactions
                 .FirstOrDefaultAsync(t => t.Id == id && !t.IsDeleted);
@@ -79,6 +79,33 @@ namespace Service.Services
 
             await _dbContext.SaveChangesAsync();
             return true;
+        }
+        public async Task<bool> DeleteTransactionAsync(int id)
+        {
+            try
+            {
+                bool exists = await _dbContext.Transactions.AnyAsync(t => t.Id == id);
+                if (!exists) return false;
+
+                int affectedRows = await _dbContext.Transactions
+                    .Where(t => t.Id == id)
+                    .ExecuteDeleteAsync();
+                return affectedRows > 0;
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                Console.WriteLine($"[ERROR] Concurrency issue while deleting: {ex.Message}");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] Unexpected error while deleting: {ex.Message}");
+                return false;
+            }
+            finally
+            {
+                _dbContext.ChangeTracker.Clear();
+            }
         }
 
         public async Task<bool> DeleteAllTransactionsAsync()

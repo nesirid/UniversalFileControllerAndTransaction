@@ -35,12 +35,30 @@ namespace App.Controllers
             return Ok(transactions);
         }
 
-        [HttpDelete("delete/{Id}")]
+        [HttpDelete("soft-delete/{Id}")]
         public async Task<IActionResult> DeleteFile(int Id)
         {
-            var result = await _transactionService.DeleteTransactionAsync(Id);
+            var result = await _transactionService.SoftDeleteTransactionAsync(Id);
             if (!result) return NotFound(new { Message = "Tranzaksiya tapilmadi" });
             return Ok(new { Message = "Transaksiya ugurla silindi" });
+        }
+
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteTransaction(int id)
+        {
+            try
+            {
+                var result = await _transactionService.DeleteTransactionAsync(id);
+                if (!result)
+                {
+                    return NotFound(new { Message = "Tranzaksiya tapilmadi" });
+                }
+                return Ok(new { Message = "Transaksiya ugurla silindi" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "Daxili server xətası baş verdi" });
+            }
         }
 
         [HttpDelete("delete-all")]
