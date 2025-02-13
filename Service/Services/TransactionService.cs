@@ -41,6 +41,8 @@ namespace Service.Services
 
             await _dbContext.Transactions.AddRangeAsync(transactions);
             await _dbContext.SaveChangesAsync();
+
+            _dbContext.ChangeTracker.Clear();
         }
 
         public async Task<List<TransactionDto>> GetTransactionDtosAsync(int pageNumber, int pageSize)
