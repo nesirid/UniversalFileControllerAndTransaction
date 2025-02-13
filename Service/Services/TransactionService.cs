@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Repository.Data;
 using Service.DTOs.Transactions;
+using Service.Parsers.Interfaces;
 using Service.Services.Interfaces;
 using System.Text;
 using System.Xml.Serialization;

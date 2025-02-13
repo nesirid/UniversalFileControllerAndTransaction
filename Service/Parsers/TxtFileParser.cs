@@ -1,5 +1,5 @@
 ﻿using Domain.Entities;
-using Service.Services.Interfaces;
+using Service.Parsers.Interfaces;
 using System.Globalization;
 using System.Text.RegularExpressions;
 

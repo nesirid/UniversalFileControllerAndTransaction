@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Service.Services.Interfaces
+namespace Service.Parsers.Interfaces
 {
     public interface IFileParser
     {

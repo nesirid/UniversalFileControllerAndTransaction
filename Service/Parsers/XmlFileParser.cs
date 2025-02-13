@@ -1,5 +1,5 @@
 ﻿using Domain.Entities;
-using Service.Services.Interfaces;
+using Service.Parsers.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -4,6 +4,7 @@ using Service.Services;
 using Service.Parsers;
 using Service.Services.Interfaces;
 using System.Text;
+using Service.Parsers.Interfaces;
 
 namespace App.Controllers
 {
