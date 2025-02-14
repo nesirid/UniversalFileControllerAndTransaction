@@ -15,7 +15,7 @@ namespace Service.Services
             _uploadsPath = configuration["FileStorage:UploadPath"] ?? "wwwroot/uploads";
 
             if (!Directory.Exists(_uploadsPath))
-                Directory.CreateDirectory(_uploadsPath);
+                 Directory.CreateDirectory(_uploadsPath);
         }
 
         public async Task<string> SaveFileAsync(IFormFile file)
@@ -25,7 +25,7 @@ namespace Service.Services
 
             string fileExtension = Path.GetExtension(file.FileName);
             string uniqueFileName = $"{Guid.NewGuid()}_{Path.GetFileNameWithoutExtension
-                (file.FileName)}{fileExtension}";
+                  (file.FileName)}{fileExtension}";
             string filePath = Path.Combine(_uploadsPath, uniqueFileName);
 
             using var stream = new FileStream(filePath, FileMode.Create);

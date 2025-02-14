@@ -67,8 +67,8 @@ namespace Service.Services
                     TransactionType = t.TransactionType,
                     Date = t.Date
                 })
-                .AsSplitQuery() 
-                .AsNoTrackingWithIdentityResolution()
+                //.AsSplitQuery() //Only for Joins (qelecekde lazim ola biler)
+                //.AsNoTrackingWithIdentityResolution() //Too much
                 .ToListAsync();
         }
 
